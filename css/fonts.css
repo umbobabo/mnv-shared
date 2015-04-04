@@ -1,0 +1,12 @@
+$pathtoeconfinal: 'http:\/\/cdn.static-economist.com\/sites\/all\/themes\/econfinal';
+
+@each $font-face in Ecotype, Ecohead, Officina, Officina_bold, Ecodrop {
+  @font-face {
+    font-family: $font-face; font-style: normal; font-weight: normal;
+    src: url('http://cdn.static-economist.com/sites/all/themes/econfinal/font/#{$font-face}.eot');
+    src: url('http://cdn.static-economist.com/sites/all/themes/econfinal/font/#{$font-face}.eot?') format('embedded-opentype'),
+    url('http://cdn.static-economist.com/sites/all/themes/econfinal/font/#{$font-face}.woff') format('woff'),
+    url('http://cdn.static-economist.com/sites/all/themes/econfinal/font/#{$font-face}.ttf') format('truetype'),
+    url('http://cdn.static-economist.com/sites/all/themes/econfinal/font/#{$font-face}.svg#{$font-face}') format('svg');
+  }
+}
