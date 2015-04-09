@@ -6,5 +6,12 @@
   ],
   "description": "Provide shared assets between widgets, components,  charts",
   "license": "MIT",
-  "homepage": "https://github.com/umbobabo/mnv-shared"
+  "homepage": "https://github.com/umbobabo/mnv-shared",
+  "ignore": [
+    "images/",
+    "node_modules/",
+    ".gitignore",
+    "bower.json",
+    "Gruntfile.js"
+  ]
 }
