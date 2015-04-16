@@ -33,7 +33,8 @@ function Widget(){
 }
 
 Widget.prototype.log = function(txt){
-  //if(widgetConfig.minerva.debugMode){
+  // widgetConfig.minerva.debugMode to be added
+  if(window.console && window.console.log){
     console.log(this.id + ' --> ' + txt);
-  //}
+  }
 }
