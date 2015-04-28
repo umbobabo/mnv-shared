@@ -1,6 +1,6 @@
 /*
   Author: Umberto Babini.
-  Scope: This class provide the creation of a singleton object that manage data retrieving for multiple instances of DOM elements
+  Purpose: This class provide the creation of a singleton object that manage data retrieving for multiple instances of DOM elements
 */
 // Init the singleton
 /* Public interface to subscribe to the data retrivement
@@ -15,8 +15,21 @@
 
 var MnvDRS = (function () {
   // Instance stores a reference to the Singleton
-  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, id = 'MnvDRSI', tmpScript, pollingTimeMin = 10000;
-
+  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange;
+  // Set property for Page visibility API
+  if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
+  } else if (typeof document.mozHidden !== "undefined") {
+    hidden = "mozHidden";
+    visibilityChange = "mozvisibilitychange";
+  } else if (typeof document.msHidden !== "undefined") {
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
+  } else if (typeof document.webkitHidden !== "undefined") {
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
+  }
   // Required file for subscription
   mandatoryFieldsList = {
     'elements': 'array',
@@ -113,6 +126,23 @@ var MnvDRS = (function () {
       },
       subscriber.pollingTime);
     }
+    // If the page is hidden, stop polling
+    function pageVisibilityChange() {
+      var sub;
+      for (var url in subscribersList) {
+        sub = subscribersList[url];
+        // Stop on hiding
+        if (document[hidden]) {
+          log('Stopping polling ' +  sub.url);
+          window.clearInterval(pollingList[sub.url]);
+          delete pollingList[sub.url];
+        } else {
+          log('Restarting polling ' +  sub.url);
+          requestData(sub);
+          startPolling(sub);
+        }
+      }
+    };
 
     // Check if every  mandatory config propeties is in the expected type
     function checkMandatoryFields(list){
@@ -129,10 +159,16 @@ var MnvDRS = (function () {
     var basic = new MNVBasic();
     this.log = basic.log;
     // Disable logs.
-    this.logEnabled = true;
+    this.logEnabled = false;
     this.ready = basic.ready;
     this.jsonp = basic.jsonp;
     this.trigger = basic.trigger;
+    this.id = 'MnvDRS';
+    // Add page visibility change listener
+    // Handle page visibility change
+    if (typeof document.addEventListener !== "undefined" && typeof document[hidden] !== "undefined") {
+      document.addEventListener(visibilityChange, pageVisibilityChange, false);
+    }
     // Public methods
     return {
       subscribe: subscribe,
@@ -141,7 +177,8 @@ var MnvDRS = (function () {
       log: log,
       logEnabled: logEnabled,
       ready: ready,
-      trigger: trigger
+      trigger: trigger,
+      stopPolling: stopPolling
     };
   };
 
