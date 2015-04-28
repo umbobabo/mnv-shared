@@ -8,6 +8,9 @@
 *  {
 *   'elements': {Array of DOM elements} ID of the object that is subscribing [Mandatory],
 *   'url': {String} URL for data retrieval [Mandatory],
+*   // If folder and file are used url became optional
+*   'folder': {String} To be used with Drupal data retrievemnt,
+*   'file':  {String} To be used with Drupal data retrievemnt,
 *   'pollingTime': null {Number} ms value for polling this URL,
 *   'callbackName': {string} Callback name function that is used on the on the jsonp file
 *  }
@@ -15,7 +18,7 @@
 
 var MnvDRS = (function () {
   // Instance stores a reference to the Singleton
-  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange, external = 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/';
+  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange;
   // Set property for Page visibility API
   if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
     hidden = "hidden";
@@ -50,7 +53,7 @@ var MnvDRS = (function () {
           if(!subscriberConfig.hasOwnProperty('folder') || !subscriberConfig.hasOwnProperty('file')){
             this.log('You have to specify a folder path on Minerva and a file name on Minerva')
           } else {
-            retrieveFolder(subscriberConfig);
+            useProxyService(subscriberConfig);
           }
         } else {
           addSubscribers(subscriberConfig);
@@ -61,12 +64,12 @@ var MnvDRS = (function () {
       }
     };
 
-    function retrieveFolder(sub){
-      //  Do something here with the external service
-      var folder = '0.0.3/';
-      folder = '';
+    function useProxyService(sub){
+      var url;
+      //  Do something here with the external service to retrieve the folder when available
+      url = (!sub.hasOwnProperty(url)) ? 'http://local.economist.com/data-assets/' : sub.url;
       // Manipulate the URL with the incoming data
-      sub.url = external + sub.folder + folder + sub.file;
+      sub.url = url + sub.folder + sub.file;
       addSubscribers(sub)
     }
 

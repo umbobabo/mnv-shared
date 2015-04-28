@@ -3,6 +3,8 @@
   <head>
     <script src="../js/basic.js"></script>
     <script src="../js/dataRetrievalService.js"></script>
+    <script src="../js/basic.js"></script>
+    <script src="../js/dataRetrievalService.js"></script>
   </head>
   <body>
     <div id="first">This is the first subscriber</div>
@@ -14,17 +16,19 @@
   var confFirstSubscriber = {
     elements: [first],
     // Minerva folder with trailing slash
-    folder: 'ukel_map/test/',
-    file: 'results2010revised.json',
+    folder: 'ukel_map/',
+    file: 'results2010revised',
     pollingTime: 20000,
     callbackName: 'results2010CB'
   };
-  // Subscription to the data retrieval singleton
   /* Public interface to subscribe to the data retrivement
   *  @param {object}
   *  {
   *   'elements': {Array of DOM elements} ID of the object that is subscribing [Mandatory],
   *   'url': {String} URL for data retrieval [Mandatory],
+  *   // If folder and file are used url became optional
+  *   'folder': {String} To be used with Drupal data retrievemnt,
+  *   'file':  {String} To be used with Drupal data retrievemnt,
   *   'pollingTime': null {Number} ms value for polling this URL,
   *   'callbackName': {string} Callback name function that is used on the on the jsonp file
   *  }
@@ -42,8 +46,8 @@
   var confSecondSubscriber = {
     elements: [second],
     // Minerva folder with trailing slash
-    folder: 'ukel_map/test/',
-    file: 'results2010revised.json',
+    folder: 'ukel_map/',
+    file: 'results2010revised',
     pollingTime: 10000,
     callbackName: 'results2010CB'
   };
@@ -54,6 +58,10 @@
   second.addEventListener('dataProvide', function(data){
       console.log('Data received, second obj is ' + data.detail[0].main_id );
       this.innerHTML += '<br>' + data.detail[0].main_id;
+    });
+
+  second.addEventListener('dataProvideError', function(error){
+      console.log(error);
     });
 
   </script>
