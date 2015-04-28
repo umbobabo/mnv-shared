@@ -18,6 +18,15 @@
     callbackName: 'results2010CB'
   };
   // Subscription to the data retrieval singleton
+  /* Public interface to subscribe to the data retrivement
+  *  @param {object}
+  *  {
+  *   'elements': {Array of DOM elements} ID of the object that is subscribing [Mandatory],
+  *   'url': {String} URL for data retrieval [Mandatory],
+  *   'pollingTime': null {Number} ms value for polling this URL,
+  *   'callbackName': {string} Callback name function that is used on the on the jsonp file
+  *  }
+  */
   MnvDRSI.subscribe(confFirstSubscriber);
 
   // Listener to intercept the data
