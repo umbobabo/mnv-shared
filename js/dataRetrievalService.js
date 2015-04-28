@@ -15,9 +15,9 @@
 
 var MnvDRS = (function () {
   // Instance stores a reference to the Singleton
-  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange;
+  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange, external = 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/';
   // Set property for Page visibility API
-  if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
+  if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
     hidden = "hidden";
     visibilityChange = "visibilitychange";
   } else if (typeof document.mozHidden !== "undefined") {
@@ -32,8 +32,7 @@ var MnvDRS = (function () {
   }
   // Required file for subscription
   mandatoryFieldsList = {
-    'elements': 'array',
-    'url': 'string'
+    'elements': 'array'
   };
 
   function init() {
@@ -47,12 +46,29 @@ var MnvDRS = (function () {
       mandatoryFields = checkMandatoryFields(mandatoryFieldsList);
       // Check mandatory fields
       if(mandatoryFields===true){
-        addSubscribers(subscriberConfig);
+        if(!subscriberConfig.hasOwnProperty('url')){
+          if(!subscriberConfig.hasOwnProperty('folder') || !subscriberConfig.hasOwnProperty('file')){
+            this.log('You have to specify a folder path on Minerva and a file name on Minerva')
+          } else {
+            retrieveFolder(subscriberConfig);
+          }
+        } else {
+          addSubscribers(subscriberConfig);
+        }
       } else {
         // Log error message
         this.log(mandatoryFields);
       }
     };
+
+    function retrieveFolder(sub){
+      //  Do something here with the external service
+      var folder = '0.0.3/';
+      folder = '';
+      // Manipulate the URL with the incoming data
+      sub.url = external + sub.folder + folder + sub.file;
+      addSubscribers(sub)
+    }
 
     // Add subscriber element to the list
     function addSubscribers(subscriberConfig){

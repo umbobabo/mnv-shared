@@ -13,7 +13,9 @@
   var first = document.getElementById('first');
   var confFirstSubscriber = {
     elements: [first],
-    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/0.0.3/results2010revised.json',
+    // Minerva folder with trailing slash
+    folder: 'ukel_map/test/',
+    file: 'results2010revised.json',
     pollingTime: 20000,
     callbackName: 'results2010CB'
   };
@@ -31,15 +33,17 @@
 
   // Listener to intercept the data
   first.addEventListener('dataProvide', function(data){
-      console.log('Data received, first obj is ' + data.detail[0].main_id );
-      this.innerHTML += '<br>' + data.detail[0].main_id;
-    });
+    console.log('Data received, first obj is ' + data.detail[0].main_id );
+    this.innerHTML += '<br>' + data.detail[0].main_id;
+  });
 
   // Second subscriber
   var second = document.getElementById('second');
   var confSecondSubscriber = {
     elements: [second],
-    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/0.0.3/results2010revised.json',
+    // Minerva folder with trailing slash
+    folder: 'ukel_map/test/',
+    file: 'results2010revised.json',
     pollingTime: 10000,
     callbackName: 'results2010CB'
   };
