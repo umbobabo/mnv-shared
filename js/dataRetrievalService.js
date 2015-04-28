@@ -132,6 +132,8 @@ var MnvDRS = (function () {
     }
 
     function stopPolling(subscriber){
+      window.clearInterval(pollingList[subscriber.url]);
+      delete pollingList[subscriber.url];
     }
 
     function startPolling(subscriber){
@@ -150,8 +152,7 @@ var MnvDRS = (function () {
         // Stop on hiding
         if (document[hidden]) {
           log('Stopping polling ' +  sub.url);
-          window.clearInterval(pollingList[sub.url]);
-          delete pollingList[sub.url];
+          stopPolling(sub);
         } else {
           log('Restarting polling ' +  sub.url);
           requestData(sub);
