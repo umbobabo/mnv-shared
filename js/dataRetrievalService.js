@@ -218,8 +218,10 @@ var MnvDRS = (function () {
 
 })();
 
-var MnvDRSI = MnvDRS.getInstance();
-// Document ready
-MnvDRSI.ready(function(){
-  MnvDRSI.start();
-});
+if(typeof MnvDRSI === 'undefined'){
+  var MnvDRSI = MnvDRS.getInstance();
+  // Document ready
+  MnvDRSI.ready(function(){
+    MnvDRSI.start();
+  });
+}
