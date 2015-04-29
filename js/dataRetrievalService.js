@@ -15,7 +15,6 @@
 *   'callbackName': {string} Callback name function that is used on the on the jsonp file
 *  }
 */
-
 var MnvDRS = (function () {
   // Instance stores a reference to the Singleton
   var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange;
@@ -67,7 +66,8 @@ var MnvDRS = (function () {
     function useProxyService(sub){
       var url;
       //  Do something here with the external service to retrieve the folder when available
-      url = (!sub.hasOwnProperty(url)) ? 'http://local.economist.com/data-assets/' : sub.url;
+      url = (!sub.hasOwnProperty(url)) ? 'http://local.demo.economist.com/testdata/' : sub.url;
+      //url = (!sub.hasOwnProperty(url)) ? 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/' : sub.url;
       // Manipulate the URL with the incoming data
       sub.url = url + sub.folder + sub.file;
       addSubscribers(sub)
@@ -95,7 +95,10 @@ var MnvDRS = (function () {
         "elements": elements,
         "pollingTime": pollingTime,
         "callbackName": subscriberConfig.callbackName,
-        "url": url
+        "url": url,
+        "pollingQueryString": (subscriberConfig.pollingQueryString !== 'undefined') ? subscriberConfig.pollingQueryString : null,
+        "pollingURL": (subscriberConfig.pollingURL !== 'undefined') ? subscriberConfig.pollingURL : null,
+        "fileFormat":  subscriberConfig.fileFormat
       };
       // Overwrite the callback
       subscribersList[url].callback = function(data){
@@ -120,7 +123,7 @@ var MnvDRS = (function () {
     // Start requests for each url
     function start(){
       log('Start request')
-      // Run an jsonp request for each url
+      // Run request for each url
       for (var url in subscribersList) {
         requestData(subscribersList[url]);
         if(subscribersList[url].pollingTime !== null){
@@ -129,9 +132,19 @@ var MnvDRS = (function () {
       };
     }
 
-    function requestData(subscriber){
+    function requestData(subscriber, useQueryString, usePollingURL){
       log('Requestiong data for ' + subscriber.url);
-      jsonp(subscriber.url, subscriber.callbackName, subscriber.callback);
+      if(usePollingURL===true){
+        subscriber.url =  subscriber.pollingURL;
+      }
+      if(useQueryString===true){
+        subscriber.url +=  '?cache=' + subscriber.pollingQueryString();
+      }
+      if(subscriber.fileFormat==='json'){
+        ajax(subscriber.url, subscriber.callback);
+      } else {
+        jsonp(subscriber.url, subscriber.callbackName, subscriber.callback);
+      }
     }
 
     function stopPolling(subscriber){
@@ -140,10 +153,11 @@ var MnvDRS = (function () {
     }
 
     function startPolling(subscriber){
-      log('Start polling for ' + subscriber.url + ' every ' + subscriber.pollingTime + ' ms');
+      var useQueryString = (subscriber.hasOwnProperty('pollingQueryString') && typeof subscriber.pollingQueryString === 'function'), usePollingURL = (subscriber.hasOwnProperty('pollingURL') && typeof subscriber.pollingURL === 'string');
+      log('Start polling for ' + subscriber.url + ' every ' + subscriber.pollingTime + ' ms. Querystring = ' + useQueryString);
       pollingList[subscriber.url] = setInterval(function(){
         log('Polling for ' + subscriber.url );
-        requestData(subscriber);
+        requestData(subscriber, useQueryString, usePollingURL);
       },
       subscriber.pollingTime);
     }
@@ -182,6 +196,7 @@ var MnvDRS = (function () {
     this.logEnabled = false;
     this.ready = basic.ready;
     this.jsonp = basic.jsonp;
+    this.ajax = basic.ajax;
     this.trigger = basic.trigger;
     this.id = 'MnvDRS';
     // Add page visibility change listener

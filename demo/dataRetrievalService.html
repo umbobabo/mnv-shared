@@ -3,23 +3,26 @@
   <head>
     <script src="../js/basic.js"></script>
     <script src="../js/dataRetrievalService.js"></script>
-    
+    <script src="../js/queryStringGenerator.js"></script>
   </head>
   <body>
     <div id="first">This is the first subscriber</div>
-    <div id="second">This is the second subscriber</div>
   <script>
 
   // First subscriber
   var first = document.getElementById('first');
   var confFirstSubscriber = {
     elements: [first],
-    // Minerva folder with trailing slash
-    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/0.0.4/results2010revised.json',
-    //folder: 'ukel_map/',
-    //file: 'results2010revised',
-    pollingTime: 20000,
-    callbackName: 'results2010CB'
+    folder: 'ukel_livemap_2015_test/',
+    file: 'results2010revised',
+    fileFormat: 'json',
+    // folder: '0.0.4/',
+    // file: 'results2010revised.json',
+    pollingTime: 10000,
+    pollingQueryString: function(){
+      return new MNVqueryStringGenerator().UTCMinuteSteps(5);
+    },
+    pollingURL: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_livemap_2015_test/results2010revised.json'
   };
   /* Public interface to subscribe to the data retrivement
   *  @param {object}
@@ -41,34 +44,5 @@
     this.innerHTML += '<br>' + data.detail[0].win;
   });
 </script>
-  <script src="../js/basic.js"></script>
-    <script src="../js/dataRetrievalService.js"></script>
-    <script type="text/javascript">
-
-  // Second subscriber
-  var second = document.getElementById('second');
-  var confSecondSubscriber = {
-    elements: [second],
-    // Minerva folder with trailing slash
-    // folder: 'ukel_map/',
-    // file: 'results2010revised',
-    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/0.0.4/results2010revised.json',
-    pollingTime: 10000,
-    callbackName: 'results2010CB'
-  };
-  // Subscription to the data retrieval singleton
-  MnvDRSI.subscribe(confSecondSubscriber);
-
-  // Listener to intercept the data
-  second.addEventListener('dataProvide', function(data){
-      console.log('Data received, second obj is ' + data.detail[0].win );
-      this.innerHTML += '<br>' + data.detail[0].win;
-    });
-
-  second.addEventListener('dataProvideError', function(error){
-      console.log(error);
-    });
-
-  </script>
   </body>
 </html>
