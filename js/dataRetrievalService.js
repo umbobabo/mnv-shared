@@ -134,16 +134,18 @@ var MnvDRS = (function () {
 
     function requestData(subscriber, useQueryString, usePollingURL){
       log('Requestiong data for ' + subscriber.url);
+      var url = subscriber.url;
+
       if(usePollingURL===true){
-        subscriber.url =  subscriber.pollingURL;
+        url =  subscriber.pollingURL;
       }
       if(useQueryString===true){
-        subscriber.url +=  '?cache=' + subscriber.pollingQueryString();
+        url +=  '?cache=' + subscriber.pollingQueryString();
       }
       if(subscriber.fileFormat==='json'){
-        ajax(subscriber.url, subscriber.callback);
+        ajax(url, subscriber.callback);
       } else {
-        jsonp(subscriber.url, subscriber.callbackName, subscriber.callback);
+        jsonp(url, subscriber.callbackName, subscriber.callback);
       }
     }
 
@@ -193,7 +195,7 @@ var MnvDRS = (function () {
     var basic = new MNVBasic();
     this.log = basic.log;
     // Disable logs.
-    this.logEnabled = false;
+    this.logEnabled = true;
     this.ready = basic.ready;
     this.jsonp = basic.jsonp;
     this.ajax = basic.ajax;
