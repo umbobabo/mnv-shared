@@ -195,7 +195,7 @@ var MnvDRS = (function () {
     var basic = new MNVBasic();
     this.log = basic.log;
     // Disable logs.
-    this.logEnabled = true;
+    this.logEnabled = false;
     this.ready = basic.ready;
     this.jsonp = basic.jsonp;
     this.ajax = basic.ajax;
