@@ -24,21 +24,27 @@ function MNVLastUpdate(container, selector, fadeOutTiming, timestamp){
     }
   };
 
+  // defaultTimestamp = function(){
+  //   var d = new Date();
+  //   var weekday = new Array(7);
+  //   weekday[0]=  "Sunday";
+  //   weekday[1] = "Monday";
+  //   weekday[2] = "Tuesday";
+  //   weekday[3] = "Wednesday";
+  //   weekday[4] = "Thursday";
+  //   weekday[5] = "Friday";
+  //   weekday[6] = "Saturday";
+
+  //   var shortMonthsName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  //   var n = weekday[d.getDay()];
+  //   return n + ' ' + d.getDate() + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() + ' at ' + ISO(d.getHours()) + ':' + ISO(d.getMinutes()) ;
+  // }
+
   defaultTimestamp = function(){
     var d = new Date();
-    var weekday = new Array(7);
-    weekday[0]=  "Sunday";
-    weekday[1] = "Monday";
-    weekday[2] = "Tuesday";
-    weekday[3] = "Wednesday";
-    weekday[4] = "Thursday";
-    weekday[5] = "Friday";
-    weekday[6] = "Saturday";
-
     var shortMonthsName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-    var n = weekday[d.getDay()];
-    return n + ' ' + d.getDate() + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() + ' at ' + ISO(d.getHours()) + ':' + ISO(d.getMinutes()) ;
+    return ISO(d.getHours()) + ':' + ISO(d.getMinutes()) + ' ' + me.ordinal_suffix_of(d.getDate()) + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() ;
   }
 
   function ISO(nr){
