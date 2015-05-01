@@ -32,10 +32,6 @@ var MnvDRS = (function () {
     hidden = "webkitHidden";
     visibilityChange = "webkitvisibilitychange";
   }
-  // Required file for subscription
-  mandatoryFieldsList = {
-    'elements': 'array'
-  };
 
   function init() {
     var subscribe, pollingList = {};
@@ -45,7 +41,7 @@ var MnvDRS = (function () {
       if(typeof subscriberConfig !== 'object' ){
         this.log('Configuration object is required');
       }
-      mandatoryFields = checkMandatoryFields(mandatoryFieldsList);
+      mandatoryFields = checkMandatoryFields(subscriberConfig);
       // Check mandatory fields
       if(mandatoryFields===true){
         if(!subscriberConfig.hasOwnProperty('url')){
@@ -87,7 +83,7 @@ var MnvDRS = (function () {
         elements = subscriberConfig.elements
         pollingTime = (Math.round(subscriberConfig.pollingTime) === subscriberConfig.pollingTime) ? subscriberConfig.pollingTime : null;
       }
-      if(pollingTime<pollingTimeMin){
+      if(pollingTime != null && pollingTime<pollingTimeMin){
         log('Polling time is too short, min value is ' + pollingTimeMin);
         return false;
       }
@@ -126,14 +122,12 @@ var MnvDRS = (function () {
       // Run request for each url
       for (var url in subscribersList) {
         requestData(subscribersList[url]);
-        if(subscribersList[url].pollingTime !== null){
-          startPolling(subscribersList[url]);
-        }
+        startPolling(subscribersList[url]);
       };
     }
 
     function requestData(subscriber, useQueryString, usePollingURL){
-      log('Requestiong data for ' + subscriber.url);
+      log('Requesting data for ' + subscriber.url);
       var url = subscriber.url;
 
       if(usePollingURL===true){
@@ -155,6 +149,9 @@ var MnvDRS = (function () {
     }
 
     function startPolling(subscriber){
+      if(subscriber.pollingTime === null){
+        return false;
+      }
       var useQueryString = (subscriber.hasOwnProperty('pollingQueryString') && typeof subscriber.pollingQueryString === 'function'), usePollingURL = (subscriber.hasOwnProperty('pollingURL') && typeof subscriber.pollingURL === 'string');
       log('Start polling for ' + subscriber.url + ' every ' + subscriber.pollingTime + ' ms. Querystring = ' + useQueryString);
       pollingList[subscriber.url] = setInterval(function(){
@@ -181,12 +178,14 @@ var MnvDRS = (function () {
     };
 
     // Check if every  mandatory config propeties is in the expected type
-    function checkMandatoryFields(list){
-      for (var i = list.length - 1; i >= 0; i--) {
-        if(typeof list[i][0] !== list[i][1]){
-          return 'Properties ' + list[i][0] + ' is expected to be ' + list[i][1];
-        }
-      };
+    function checkMandatoryFields(subscriberConfig){
+      if(!subscriberConfig.elements.tagName && typeof subscriberConfig.elements != 'array'){
+        return 'element should by an array of DOM elements or a DOM element';
+      }
+      if(subscriberConfig.elements.tagName){
+        // Wrapping single DOM element on an array
+        subscriberConfig.elements = [subscriberConfig.elements];
+      }
       return true;
     }
 

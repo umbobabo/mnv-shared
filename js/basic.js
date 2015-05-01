@@ -2,8 +2,8 @@ function MNVBasic(){
   // Set log Off
   this.logEnabled = false;
   this.log = function (txt, error){
-    // Disabled log
-    if(this.hasOwnProperty('logEnabled') && !this.logEnabled){
+    // Disabled log but print errors anyway
+    if(this.hasOwnProperty('logEnabled') && !this.logEnabled && typeof error === 'undefined'){
       return;
     }
     var msg = '';
@@ -82,5 +82,21 @@ function MNVBasic(){
     var script = document.createElement('script');
     script.src = url;
     document.body.appendChild(script);
+  }
+
+  this.addClass = function(el, className){
+    if (el.classList){
+      el.classList.add(className);
+    } else {
+      el.className += ' ' + className;
+    }
+  }
+
+  this.removeClass = function(el, className){
+    if (el.classList){
+      el.classList.remove(className);
+    } else {
+      el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
   }
 }

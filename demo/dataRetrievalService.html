@@ -4,22 +4,36 @@
     <script src="../js/basic.js"></script>
     <script src="../js/dataRetrievalService.js"></script>
     <script src="../js/queryStringGenerator.js"></script>
+    <script src="../js/lastUpdate.js"></script>
+    <style>
+      .not-highlight {
+        background: initial;
+        -webkit-transition: background 2000ms ease-out;
+        -moz-transition: background 2000ms ease-out;
+        -ms-transition: background 2000ms ease-out;
+        -o-transition: background 2000ms ease-out;
+        transition: background 2000ms ease-out;
+      }
+      .highlight {
+        background: red;
+      }
+    </style>
   </head>
   <body>
-    <div id="first">This is the first subscriber</div>
+    <div id="first" >This is the first subscriber<div class='last-update'></div></div>
   <script>
 
   // First subscriber
   var first = document.getElementById('first');
   var confFirstSubscriber = {
-    elements: document.getElementsByClassName('mnv-map-uk-election-2015'),
+    elements: first,
     //callbackName: 'results2015BasicCB',
-    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_livemap_2015_test/2015ResultCB.json',
-    callbackName: 'results2015',
+    url: 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_linechart/test/polldata.json',
+    callbackName: 'lineChartDataCB',
     pollingTime: 10000,
-    pollingQueryString: function(){
-      return new MNVqueryStringGenerator().UTCMinuteSteps(1);
-    }
+    // pollingQueryString: function(){
+    //   return new MNVqueryStringGenerator().UTCMinuteSteps(1);
+    // }
   };
   /* Public interface to subscribe to the data retrivement
   *  @param {object}
@@ -38,6 +52,7 @@
   // Listener to intercept the data
   first.addEventListener('dataProvide', function(data){
     console.log('Data received, first obj is ' + data.detail[0].win );
+    var lastUpdate = (typeof lastUpdate === 'undefined') ? new MNVLastUpdate(this) : lastUpdate.update(this);
     this.innerHTML += '<br>' + data.detail[0].win;
   });
 </script>
