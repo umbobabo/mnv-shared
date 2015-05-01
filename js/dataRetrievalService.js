@@ -179,7 +179,7 @@ var MnvDRS = (function () {
 
     // Check if every  mandatory config propeties is in the expected type
     function checkMandatoryFields(subscriberConfig){
-      if(!subscriberConfig.elements.tagName && typeof subscriberConfig.elements != 'array'){
+      if(!subscriberConfig.elements.tagName && typeof subscriberConfig.elements != 'array'  && subscriberConfig.elements.constructor.name!='HTMLCollection'){
         return 'element should by an array of DOM elements or a DOM element';
       }
       if(subscriberConfig.elements.tagName){
