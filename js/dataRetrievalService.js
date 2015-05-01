@@ -92,6 +92,7 @@ var MnvDRS = (function () {
         "pollingTime": pollingTime,
         "callbackName": subscriberConfig.callbackName,
         "url": url,
+        "firstRequestQueryString": (subscriberConfig.firstRequestQueryString !== 'undefined') ? subscriberConfig.firstRequestQueryString : false,
         "pollingQueryString": (subscriberConfig.pollingQueryString !== 'undefined') ? subscriberConfig.pollingQueryString : null,
         "pollingURL": (subscriberConfig.pollingURL !== 'undefined') ? subscriberConfig.pollingURL : null,
         "fileFormat":  subscriberConfig.fileFormat
@@ -121,7 +122,7 @@ var MnvDRS = (function () {
       log('Start request')
       // Run request for each url
       for (var url in subscribersList) {
-        requestData(subscribersList[url]);
+        requestData(subscribersList[url], subscribersList[url].firstRequestQueryString);
         startPolling(subscribersList[url]);
       };
     }
