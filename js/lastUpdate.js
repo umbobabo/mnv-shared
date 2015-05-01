@@ -35,8 +35,18 @@ function MNVLastUpdate(container, selector, fadeOutTiming, timestamp){
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
 
+    var shortMonthsName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
     var n = weekday[d.getDay()];
-    return n + ' ' + d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' at ' + d.getHours() + ':' + d.getMinutes() ;
+    return n + ' ' + d.getDate() + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() + ' at ' + ISO(d.getHours()) + ':' + ISO(d.getMinutes()) ;
+  }
+
+  function ISO(nr){
+    var str = nr.toString();
+    if(str.length>2){
+      str += '0';
+    }
+    return str
   }
   me.addClass(tag, 'not-highlight');
   timestamp = (typeof timestamp === 'undefined') ? defaultTimestamp : timestamp;

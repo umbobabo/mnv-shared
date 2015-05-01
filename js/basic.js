@@ -1,5 +1,6 @@
 function MNVBasic(){
   // Set log Off
+  var me = this;
   this.logEnabled = false;
   this.log = function (txt, error){
     // Disabled log but print errors anyway
@@ -73,15 +74,19 @@ function MNVBasic(){
   }
 
   this.jsonp = function(url, callbackName, callback) {
-    window[callbackName] = function(data) {
-      delete window[callbackName];
-      document.body.removeChild(script);
-      callback(data);
-    };
-
     var script = document.createElement('script');
     script.src = url;
     document.body.appendChild(script);
+
+    window[callbackName] = function(data) {
+      delete window[callbackName];
+      // Get all the node List
+      var scripts = document.getElementsByTagName('script');
+      if(me.hasAttributeEqualTo(scripts, 'src', script.src )){
+        document.body.removeChild(script);
+      }
+      callback(data);
+    };
   }
 
   this.addClass = function(el, className){
@@ -97,6 +102,21 @@ function MNVBasic(){
       el.classList.remove(className);
     } else {
       el.className = el.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+    }
+  }
+
+  this.hasAttributeEqualTo = function(els, attr, val){
+    if(els.tagName){
+      return els.hasAttribute(attr) === val;
+    } else {
+      // els is a nodeList
+      var i = 0;
+      for(i=0; i< els.length; i++){
+        if(els[i].hasAttribute(attr) && els[i][attr] === val){
+          return els[i];
+        }
+      };
+      return false;
     }
   }
 }
