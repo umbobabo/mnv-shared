@@ -172,7 +172,7 @@ var MnvDRS = (function () {
           stopPolling(sub);
         } else {
           log('Restarting polling ' +  sub.url);
-          requestData(sub);
+          requestData(sub, sub.firstRequestQueryString);
           startPolling(sub);
         }
       }
