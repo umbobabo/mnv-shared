@@ -187,6 +187,10 @@ var MnvDRS = (function () {
         // Wrapping single DOM element on an array
         subscriberConfig.elements = [subscriberConfig.elements];
       }
+      // Convert HTMLCollection to an array
+      if(subscriberConfig.elements.constructor.name==='HTMLCollection'){
+        subscriberConfig.elements = [].slice.call(subscriberConfig.elements);
+      }
       return true;
     }
 
