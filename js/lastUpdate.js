@@ -1,6 +1,6 @@
 /*
   Author: Umberto Babini.
-  Purpose: Provide a simple update of a field
+  Purpose: Provide a simple update time on 'last-update' field
 */
 function MNVLastUpdate(container, selector, fadeOutTiming, timestamp){
   var update, tag, elSelector, fadeOutTiming, me, defaultTimestamp;
@@ -44,13 +44,13 @@ function MNVLastUpdate(container, selector, fadeOutTiming, timestamp){
   defaultTimestamp = function(){
     var d = new Date();
     var shortMonthsName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return ISO(d.getHours()) + ':' + ISO(d.getMinutes()) + ' ' + me.ordinal_suffix_of(d.getDate()) + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() ;
+    return d.getHours() + ':' + ISO(d.getMinutes()) + ' ' + me.ordinal_suffix_of(d.getDate()) + ' ' + shortMonthsName[d.getMonth()] + ' ' + d.getFullYear() ;
   }
 
   function ISO(nr){
     var str = nr.toString();
-    if(str.length>2){
-      str += '0';
+    if(str.length<2){
+      str = '0' + str;
     }
     return str
   }
