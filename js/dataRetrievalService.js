@@ -17,7 +17,7 @@
 */
 var MnvDRS = (function () {
   // Instance stores a reference to the Singleton
-  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange;
+  var _mnvdrs, mandatoryFieldsList, subscribersList = {}, tmpScript, pollingTimeMin = 10000, hidden, visibilityChange, preSubscribersList = [];
   // Set property for Page visibility API
   if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support
     hidden = "hidden";
@@ -51,12 +51,16 @@ var MnvDRS = (function () {
             useProxyService(subscriberConfig);
           }
         } else {
-          addSubscribers(subscriberConfig);
+          addPreSubscribersList(subscriberConfig);
         }
       } else {
         // Log error message
         this.log(mandatoryFields);
       }
+    };
+
+    function addPreSubscribersList(sub){
+      preSubscribersList.push(sub);
     };
 
     function useProxyService(sub){
@@ -66,7 +70,7 @@ var MnvDRS = (function () {
       //url = (!sub.hasOwnProperty(url)) ? 'http://cdn.static-economist.com/sites/default/files/external/minerva_assets/ukel_map/test/' : sub.url;
       // Manipulate the URL with the incoming data
       sub.url = url + sub.folder + sub.file;
-      addSubscribers(sub)
+      addPreSubscribersList(sub);
     }
 
     // Add subscriber element to the list
@@ -97,6 +101,7 @@ var MnvDRS = (function () {
         "pollingURL": (subscriberConfig.pollingURL !== 'undefined') ? subscriberConfig.pollingURL : null,
         "fileFormat":  subscriberConfig.fileFormat
       };
+
       // Overwrite the callback
       subscribersList[url].callback = function(data){
         for (var i = subscribersList[url].elements.length - 1; i >= 0; i--) {
@@ -120,6 +125,12 @@ var MnvDRS = (function () {
     // Start requests for each url
     function start(){
       log('Start request')
+      // Add all the subscribers on the list
+      // Prepare the elements
+      for (var i = preSubscribersList.length - 1; i >= 0; i--) {
+        preSubscribersList[i].elements = [document.querySelector(preSubscribersList[i].elements)];
+        addSubscribers(preSubscribersList[i]);
+      };
       // Run request for each url
       for (var url in subscribersList) {
         requestData(subscribersList[url], subscribersList[url].firstRequestQueryString);
@@ -180,9 +191,6 @@ var MnvDRS = (function () {
 
     // Check if every  mandatory config propeties is in the expected type
     function checkMandatoryFields(subscriberConfig){
-      if(!subscriberConfig.elements.tagName && typeof subscriberConfig.elements != 'array'  && subscriberConfig.elements.constructor.name!='HTMLCollection'){
-        return 'element should by an array of DOM elements or a DOM element';
-      }
       if(subscriberConfig.elements.tagName){
         // Wrapping single DOM element on an array
         subscriberConfig.elements = [subscriberConfig.elements];
@@ -199,7 +207,7 @@ var MnvDRS = (function () {
     var basic = new MNVBasic();
     this.log = basic.log;
     // Disable logs.
-    this.logEnabled = false;
+    this.logEnabled = true;
     this.ready = basic.ready;
     this.jsonp = basic.jsonp;
     this.ajax = basic.ajax;
@@ -242,7 +250,7 @@ var MnvDRS = (function () {
 if(typeof MnvDRSI === 'undefined'){
   var MnvDRSI = MnvDRS.getInstance();
   // Document ready
-  MnvDRSI.ready(function(){
+  $(document).ready(function(){
     MnvDRSI.start();
   });
 }
