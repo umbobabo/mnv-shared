@@ -1,14 +1,38 @@
-var express = require("express");
+var express = require("express"), port = 3000, listenOnFreePort, grunt = require('grunt');
 
 var app = express();
-    app.use(express.logger());
+    //app.use(express.logger());
     app.set("view options", {layout: false});
     app.use(express.static(__dirname));
 
 app.get('/', function(req, res){
     res.render('index.html');
 });
-app.listen(3000);
+/*
+  listenOnFreePort: Check avaible port to listen at and automatically run grunt
+*/
+function listenOnFreePort(){
+  app.listen(port, function() {
+    console.log('Port ' + port + ' is available.');
+    // Automatically run Grunt
+    grunt.tasks(['default']);
+  })
+  .on('error',
+    function(err) {
+      if (err.errno === 'EADDRINUSE') {
+        var oldport = port;
+        port++;
+        console.log('Port ' + oldport + ' seems to be in use, I will try port ' + port );
+        listenOnFreePort();
+      } else {
+        console.log(err);
+      }
+  });
+}
+
+listenOnFreePort();
+
+
 console.log("@@@@@@8OOOOOO88@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@8OCooooCO8@@@");
 console.log("@C:               :O@@@@@@@@@@@@@@@@@@C:               .O@");
 console.log("@@@@@@@@@@.           :O@@@@@@@@@@O:          :@@@@@@@@@@@");

@@ -2,7 +2,6 @@
   Author: Umberto Babini.
   Purpose: This class provide the creation of a singleton object that manage data retrieving for multiple instances of DOM elements
 */
-// Init the singleton
 /* Public interface to subscribe to the data retrivement
 *  @param {object}
 *  {

@@ -28,11 +28,41 @@ module.exports = function(grunt) {
           options: {
           }
       }
+    },
+    watch: {
+      scripts: {
+        files: 'js/*.js'
+      },
+      sass: {
+        files: ['css/components/overlay/*.scss'],
+        tasks: ['sass:dev']
+      }
+    },
+    sass: {
+      dev: {
+        files: {
+          'css/components/overlay/style.css': 'css/components/overlay/package.scss'
+        }
+      }
+    },
+    browserSync: {
+      dev: {
+        bsFiles: {
+          src : ['css/*.*', 'js/*.*']
+        },
+        options: {
+          watchTask: true // < VERY important
+        }
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-svgmin');
   grunt.loadNpmTasks('grunt-grunticon');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-browser-sync');
+  grunt.loadNpmTasks('grunt-sass');
+  grunt.registerTask('default', ['sass:dev', 'browserSync', 'watch']);
   //TODO implement svgmin to reduce svg sizes
   //'svgmin',
   grunt.registerTask('icons', ['grunticon:sharedIcons']);
