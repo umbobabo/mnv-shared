@@ -1,0 +1,96 @@
+// Respond-to mixin provide an easy way to add mediaqueries.
+@mixin respond-to($ver...) {
+  @each $version in $ver {
+    @if $version == 'mobilePortrait' {
+      @media screen and (max-width: 767px) and (orientation: portrait) {
+        @content;
+      }
+    }
+    @if $version == 'mobileLandscape' {
+      @media screen and (max-width: 767px) and (orientation: landscape) {
+        @content;
+      }
+    }
+    @if $version == 'mobile' {
+      @media screen and (max-width: 767px) {
+        @content;
+      }
+    }
+    @if $version == 'smallmobile' {
+      @media screen and (max-width: 480px) {
+        @content;
+      }
+    }
+    @if $version == 'smallestmobile' {
+      @media screen and (max-width: 320px) {
+        @content;
+      }
+    }
+    @if $version == 'notMobile' {
+      @media screen and (min-width: 768px) {
+        @content;
+      }
+    }
+    @if $version == 'lowResolution' {
+      @media screen and (min-width: 901px) and (max-width: 1024px) {
+        @content;
+      }
+    }
+    @if $version == 'tablet' {
+      @media screen and (min-width: 768px) and (max-width: 900px) {
+        @content;
+      }
+    }
+    @if $version == 'tabletPortrait' {
+      @media screen and (min-width: 768px) and (max-width: 1024px)  and (orientation: portrait) {
+        @content;
+      }
+    }
+    @if $version == 'tabletLandscape' {
+      @media screen and (min-width: 768px) and (max-width: 1024px)  and (orientation: landscape) {
+        @content;
+      }
+    }
+    @if $version == 'retina' {
+      @media screen and (-webkit-min-device-pixel-ratio: 2),
+      screen and (   min--moz-device-pixel-ratio: 2),
+      screen and (     -o-min-device-pixel-ratio: 2/1),
+      screen and (        min-device-pixel-ratio: 2),
+      screen and (                min-resolution: 192dpi),
+      screen and (                min-resolution: 2dppx) {
+        @content;
+      }
+    }
+
+    @if $version == 'iphone5Landscape' {
+      @media only screen
+      and (min-device-width : 280px)
+      and (max-device-width : 568px)
+      and (orientation : landscape)
+      and (-webkit-min-device-pixel-ratio : 2)
+      {
+        @content;
+      }
+    }
+    @if $version == 'iphone6Landscape' {
+     @media only screen
+      and (min-device-width : 375px)
+      and (max-device-width : 667px)
+      and (orientation : landscape)
+      and (-webkit-min-device-pixel-ratio : 2)
+      {
+        @content;
+      }
+    }
+    @if $version == 'iphone6PlusLandscape' {
+      @media only screen
+      and (min-device-width : 414px)
+      and (max-device-width : 736px)
+      and (orientation : landscape)
+      and (-webkit-min-device-pixel-ratio : 3)
+      {
+        @content;
+      }
+    }
+  }
+}
