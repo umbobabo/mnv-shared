@@ -1,6 +1,6 @@
 .mnv-preloader-overlay {
   content: '';
-  background: white;
+  background: $preloader-overlay-color;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -24,7 +24,7 @@
 .mnv-preloader-loader:before {
   width: ($preloader-size/2 + $preloader-thick);
   height: $preloader-size + ($preloader-thick*10);
-  background: white;
+  background: $preloader-overlay-color;
   border-radius: ($preloader-size + $preloader-thick) 0 0 ($preloader-size + $preloader-thick);
   top: -($preloader-thick/2);
   left: -($preloader-thick/2);
@@ -50,7 +50,7 @@
 .mnv-preloader-loader:after {
   width: ($preloader-size/2 + $preloader-thick);
   height: ($preloader-size + $preloader-thick);
-  background: white;
+  background: $preloader-overlay-color;
   border-radius: 0 ($preloader-size + $preloader-thick) ($preloader-size + $preloader-thick) 0;
   top: -($preloader-thick/2);
   left: ($preloader-size/2 + ($preloader-thick/2));
