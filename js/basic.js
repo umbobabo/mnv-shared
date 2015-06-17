@@ -50,14 +50,19 @@ function MNVBasic(){
     this.dispatchEvent(myEvent);
   };
 
-  this.ajax = function(url, fn){
-    var request = new XMLHttpRequest();
+  this.ajax = function(url, fn, datatype){
+    var request = new XMLHttpRequest(), dt = (typeof datatype !== 'undefined') ? datatype : 'json';
     request.open('GET', url, true);
 
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
         // Success!
-        var data = JSON.parse(request.responseText);
+        var data;
+        if(dt==='json'){
+          data = JSON.parse(request.responseText);
+        } else {
+          data = request.responseText;
+        }
         fn(data);
       } else {
         // We reached our target server, but it returned an error

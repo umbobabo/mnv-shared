@@ -16,7 +16,7 @@ function Widget(){
       $(".mnv-preloader-overlay", this.el).fadeOut(300, function(){
         $(this).remove();
       });
-    });    
+    });
   }
 
   this.bindEvent = function(){
@@ -31,6 +31,8 @@ function Widget(){
   }
 
 }
+
+Widget.prototype = new MNVBasic();
 
 Widget.prototype.log = function(txt){
   // widgetConfig.minerva.debugMode to be added
